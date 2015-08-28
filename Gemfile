@@ -45,4 +45,5 @@ group :development, :test do
   gem 'spring'
 end
 gem 'pg', group: :production # Added postgres and made it production only.
+gem 'rails_12factor'
 
