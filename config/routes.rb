@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'pages/home'
+  root 'pages#home'
 
   resources :events
   # The priority is based upon order of creation: first created -> highest priority.
