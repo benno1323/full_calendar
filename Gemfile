@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'momentjs-rails'
 gem 'fullcalendar-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
