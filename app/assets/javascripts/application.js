@@ -17,3 +17,71 @@
 //= require fullcalendar
 //= require jquery-ui
 //= require_tree .
+
+var updateEvent;
+
+$(document).ready(function() {
+  return $('#calendar').fullCalendar({
+    editable: true,
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'month,agendaWeek,agendaDay'
+    },
+    defaultView: 'month',
+    height: 500,
+    slotMinutes: 30,
+    eventSources: [
+      {
+        url: '/events'
+      }
+    ],
+    timeFormat: 'h:mm t{ - h:mm t} ',
+    dragOpacity: "0.5",
+    eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {
+      return updateEvent(event);
+    },
+    eventResize: function(event, dayDelta, minuteDelta, revertFunc) {
+      return updateEvent(event);
+    },
+    selectable: true,
+    select: function(start, end, allDay) {
+    var title = prompt('Event Title:');
+    if (title) {
+        calendar.fullCalendar('renderEvent',
+            {
+                title: title,
+                start: start,
+                end: end,
+                allDay: allDay
+            },
+            true // make the event "stick"
+        );
+        /**
+         * ajax call to store event in DB
+         */
+        jQuery.post(
+            "events/new" // your url
+            , { // re-use event's data
+                title: title,
+                start: start,
+                end: end,
+                allDay: allDay
+            }
+        );
+    }
+    calendar.fullCalendar('unselect');
+}
+  });
+});
+
+updateEvent = function(the_event) {
+  return $.update("/events/" + the_event.id, {
+    event: {
+      title: the_event.title,
+      starts_at: "" + the_event.start,
+      ends_at: "" + the_event.end,
+      description: the_event.description
+    }
+  });
+};
